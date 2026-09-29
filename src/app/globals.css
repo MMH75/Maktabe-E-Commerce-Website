@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  /* ===== Design tokens — Maktaba Khuddam-ul-Quran palette ===== */
+  --color-primary: #123c35; /* Deep Emerald Green */
+  --color-secondary: #1e5a4f; /* Forest Green */
+  --color-accent: #c9a24d; /* Muted Gold */
+  --color-bg: #faf8f2; /* Warm Cream */
+  --color-surface: #ffffff; /* White */
+  --color-text: #252525; /* Charcoal */
+  --color-text-muted: #737373; /* Soft Gray */
+}
+
+@theme inline {
+  --color-emerald-deep: var(--color-primary);
+  --color-forest: var(--color-secondary);
+  --color-gold: var(--color-accent);
+  --color-cream: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-charcoal: var(--color-text);
+  --color-softgray: var(--color-text-muted);
+
+  --font-heading: var(--font-playfair), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-urdu: var(--font-nastaliq), "Noto Nastaliq Urdu", serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.font-heading {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+.font-urdu {
+  font-family: var(--font-nastaliq), "Noto Nastaliq Urdu", serif;
+  direction: rtl;
+}
+
+/* Hide scrollbar utility for carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
