@@ -1,43 +1,40 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useStore, type ProductInfo } from "@/lib/store";
 
 export default function ProductCard({ product }: { product: ProductInfo }) {
-  const router = useRouter();
   const { addToCart, toggleWishlist, isWishlisted } = useStore();
   const wished = isWishlisted(product.id);
+  const href = `/products/${product.id}`;
 
   return (
-    <article
-      onClick={() => router.push(`/products/${product.id}`)}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-xl border border-charcoal/5 bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-    >
+    <article className="group flex flex-col overflow-hidden rounded-xl border border-cream-deep bg-surface transition duration-300 hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-lg">
       {/* Image */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-cream">
-        <Image
-          src={product.image}
-          alt={product.titleEn}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-cover transition duration-500 group-hover:scale-105"
-        />
-        {/* Wishlist toggle overlay */}
+      <div className="relative aspect-square w-full bg-cream">
+        <Link href={href} aria-label={product.titleEn} className="absolute inset-0">
+          <Image
+            src={product.image}
+            alt={product.titleEn}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
+            className="object-contain p-3 transition duration-500 group-hover:scale-105"
+          />
+        </Link>
         <button
           aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleWishlist(product);
-          }}
-          className="absolute right-3 top-3 rounded-full bg-surface/90 p-2 shadow-sm backdrop-blur transition hover:scale-110"
+          onClick={() => toggleWishlist(product)}
+          className={`absolute right-2 top-2 rounded-full bg-white p-1.5 shadow-sm transition hover:scale-110 ${
+            wished ? "text-gold" : "text-navy"
+          }`}
         >
           <svg
             viewBox="0 0 24 24"
-            fill={wished ? "#C9A24D" : "none"}
-            stroke={wished ? "#C9A24D" : "#123C35"}
+            fill={wished ? "currentColor" : "none"}
+            stroke="currentColor"
             strokeWidth="1.8"
-            className="h-5 w-5"
+            className="h-4 w-4"
           >
             <path
               strokeLinecap="round"
@@ -49,57 +46,31 @@ export default function ProductCard({ product }: { product: ProductInfo }) {
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col p-4">
-        <h3
-          dir="rtl"
-          lang="ur"
-          className="font-urdu text-lg leading-10 text-charcoal"
-          title={product.titleEn}
-        >
-          {product.titleUr}
-        </h3>
-        <p className="mt-0.5 line-clamp-1 text-xs text-softgray">
-          {product.titleEn}
-        </p>
-        <p className="mt-2 font-heading text-lg font-bold text-emerald-deep">
-          Rs {product.price.toLocaleString()}
-        </p>
+      <div className="flex flex-1 flex-col px-3 pb-3 pt-1">
+        <Link href={href} title={product.titleEn}>
+          <h3
+            dir="rtl"
+            lang="ur"
+            className="truncate font-urdu text-base leading-[2.6rem] text-ink transition group-hover:text-navy-soft"
+          >
+            {product.titleUr}
+          </h3>
+          <p className="truncate text-xs text-muted">{product.titleEn}</p>
+        </Link>
 
-        <div className="mt-3 flex items-center gap-2">
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+          <p className="whitespace-nowrap font-heading text-base font-bold text-navy sm:text-lg">
+            Rs {product.price.toLocaleString()}
+          </p>
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(product, 1);
-            }}
-            className="flex-1 rounded-md bg-emerald-deep px-3 py-2.5 text-xs font-semibold uppercase tracking-wide text-cream transition hover:bg-forest"
+            onClick={() => addToCart(product, 1)}
+            aria-label={`Add ${product.titleEn} to cart`}
+            className="flex items-center gap-1.5 shrink-0 rounded-full bg-navy p-2 text-xs sm:px-3 sm:py-1.5 font-semibold text-white transition hover:bg-gold"
           >
-            Add to Cart
-          </button>
-          <button
-            aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleWishlist(product);
-            }}
-            className={`rounded-md border p-2.5 transition ${
-              wished
-                ? "border-gold bg-gold/10"
-                : "border-charcoal/15 hover:border-forest"
-            }`}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill={wished ? "#C9A24D" : "none"}
-              stroke={wished ? "#C9A24D" : "#123C35"}
-              strokeWidth="1.8"
-              className="h-4 w-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 8.6c0 5.2-7.7 9.9-9 10.7-1.3-.8-9-5.5-9-10.7A4.9 4.9 0 0 1 7.9 3.7 5.1 5.1 0 0 1 12 5.8a5.1 5.1 0 0 1 4.1-2.1A4.9 4.9 0 0 1 21 8.6Z"
-              />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
+              <path strokeLinecap="round" d="M12 5v14M5 12h14" />
             </svg>
+            <span className="hidden sm:inline">Add</span>
           </button>
         </div>
       </div>

@@ -5,6 +5,8 @@ import { useRef, useState } from "react";
 import type { Product } from "@/db/schema";
 import { useStore } from "@/lib/store";
 
+const URDU_SCRIPT = /[؀-ۿ]/;
+
 export default function ProductView({ product }: { product: Product }) {
   const { addToCart, toggleWishlist, isWishlisted } = useStore();
   const [qty, setQty] = useState(1);
@@ -35,12 +37,12 @@ export default function ProductView({ product }: { product: Product }) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       {/* Breadcrumb */}
-      <nav className="mb-6 text-xs text-softgray">
+      <nav className="mb-6 text-xs text-muted">
         <span>Home</span>
         <span className="mx-2 text-gold">/</span>
         <span>Books</span>
         <span className="mx-2 text-gold">/</span>
-        <span className="text-charcoal">{product.titleEn}</span>
+        <span className="text-ink">{product.titleEn}</span>
       </nav>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
@@ -48,7 +50,7 @@ export default function ProductView({ product }: { product: Product }) {
         <div>
           <div
             ref={frameRef}
-            className="relative aspect-[4/5] w-full touch-none select-none overflow-hidden rounded-xl border border-charcoal/5 bg-surface shadow-sm"
+            className="relative aspect-[4/5] w-full touch-none select-none overflow-hidden rounded-xl border border-ink/5 bg-surface shadow-sm"
             onMouseEnter={() => setZooming(true)}
             onMouseLeave={() => setZooming(false)}
             onMouseMove={(e) => updateOrigin(e.clientX, e.clientY)}
@@ -75,7 +77,7 @@ export default function ProductView({ product }: { product: Product }) {
               }}
             />
             {!zooming && (
-              <span className="absolute bottom-3 right-3 rounded-full bg-emerald-deep/70 px-3 py-1 text-[11px] text-cream backdrop-blur">
+              <span className="absolute bottom-3 right-3 rounded-full bg-navy/70 px-3 py-1 text-[11px] text-cream backdrop-blur">
                 Hover / touch &amp; move to zoom
               </span>
             )}
@@ -87,33 +89,33 @@ export default function ProductView({ product }: { product: Product }) {
           <h1
             dir="rtl"
             lang="ur"
-            className="font-urdu text-3xl leading-[4.5rem] text-charcoal sm:text-4xl sm:leading-[5.5rem]"
+            className="font-urdu text-3xl leading-[4.5rem] text-ink sm:text-4xl sm:leading-[5.5rem]"
           >
             {product.titleUr}
           </h1>
-          <p className="mt-1 font-heading text-lg text-softgray">
+          <p className="mt-1 font-heading text-lg text-muted">
             {product.titleEn}
           </p>
-          <p dir="rtl" lang="ur" className="mt-2 font-urdu text-sm text-softgray">
+          <p dir="rtl" lang="ur" className="mt-2 font-urdu text-sm text-muted">
             {product.author}
           </p>
 
           <div className="my-5 h-px w-full bg-gold/40" />
 
-          <p className="font-heading text-3xl font-bold text-emerald-deep">
+          <p className="font-heading text-3xl font-bold text-navy">
             Rs {product.price.toLocaleString()}
           </p>
-          <p className="mt-1 text-xs text-softgray">
+          <p className="mt-1 text-xs text-muted">
             Free home delivery in Pakistan · Cash on delivery available
           </p>
 
           {/* Quantity + Add to cart */}
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <div className="flex items-center rounded-md border border-charcoal/20 bg-surface">
+            <div className="flex items-center rounded-md border border-ink/20 bg-surface">
               <button
                 aria-label="Decrease quantity"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                className="px-4 py-3 text-lg text-emerald-deep transition hover:bg-cream"
+                className="px-4 py-3 text-lg text-navy transition hover:bg-cream"
               >
                 −
               </button>
@@ -124,12 +126,12 @@ export default function ProductView({ product }: { product: Product }) {
                 onChange={(e) =>
                   setQty(Math.max(1, Number(e.target.value) || 1))
                 }
-                className="w-14 border-x border-charcoal/10 py-3 text-center text-sm font-semibold outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="w-14 border-x border-ink/10 py-3 text-center text-sm font-semibold outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <button
                 aria-label="Increase quantity"
                 onClick={() => setQty((q) => q + 1)}
-                className="px-4 py-3 text-lg text-emerald-deep transition hover:bg-cream"
+                className="px-4 py-3 text-lg text-navy transition hover:bg-cream"
               >
                 +
               </button>
@@ -137,7 +139,7 @@ export default function ProductView({ product }: { product: Product }) {
 
             <button
               onClick={() => addToCart(info, qty)}
-              className="flex-1 rounded-md bg-emerald-deep px-6 py-3.5 text-sm font-semibold uppercase tracking-wide text-cream transition hover:bg-forest sm:flex-none sm:px-10"
+              className="flex-1 rounded-md bg-navy px-6 py-3.5 text-sm font-semibold uppercase tracking-wide text-cream transition hover:bg-navy-soft sm:flex-none sm:px-10"
             >
               Add to Cart
             </button>
@@ -147,14 +149,14 @@ export default function ProductView({ product }: { product: Product }) {
             onClick={() => toggleWishlist(info)}
             className={`mt-3 flex w-full items-center justify-center gap-2 rounded-md border px-6 py-3 text-sm font-medium transition sm:w-fit sm:px-10 ${
               wished
-                ? "border-gold bg-gold/10 text-emerald-deep"
-                : "border-charcoal/20 text-charcoal hover:border-forest hover:text-forest"
+                ? "border-gold bg-gold/10 text-navy"
+                : "border-ink/20 text-ink hover:border-navy-soft hover:text-navy-soft"
             }`}
           >
             <svg
               viewBox="0 0 24 24"
-              fill={wished ? "#C9A24D" : "none"}
-              stroke={wished ? "#C9A24D" : "currentColor"}
+              fill={wished ? "var(--color-accent)" : "none"}
+              stroke={wished ? "var(--color-accent)" : "currentColor"}
               strokeWidth="1.8"
               className="h-4.5 w-4.5"
             >
@@ -169,14 +171,25 @@ export default function ProductView({ product }: { product: Product }) {
 
           {/* Description */}
           <div className="mt-8 rounded-xl bg-surface p-6 shadow-sm">
-            <h2 className="font-heading text-lg font-semibold text-emerald-deep">
+            <h2 className="font-heading text-lg font-semibold text-navy">
               About this book
             </h2>
             <div className="my-3 h-px w-16 bg-gold" />
-            <p className="text-sm leading-relaxed text-charcoal/90">
-              {product.description}
-            </p>
-            <ul className="mt-4 grid grid-cols-1 gap-2 text-xs text-softgray sm:grid-cols-2">
+            {/* Urdu descriptions get the Nastaliq font (as on About Us); English ones keep the body font */}
+            {URDU_SCRIPT.test(product.description) ? (
+              <p
+                dir="rtl"
+                lang="ur"
+                className="font-urdu text-[0.95rem] leading-[2.4rem] tracking-[0.02em] text-ink/90"
+              >
+                {product.description}
+              </p>
+            ) : (
+              <p className="text-sm leading-relaxed text-ink/90">
+                {product.description}
+              </p>
+            )}
+            <ul className="mt-4 grid grid-cols-1 gap-2 text-xs text-muted sm:grid-cols-2">
               <li className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-gold" />
                 Authentic publication — Maktaba Khuddam-ul-Quran
