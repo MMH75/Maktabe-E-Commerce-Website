@@ -4,3 +4,6 @@ vendor/
 .env
 .next/
 .nuxt/
+
+# Images uploaded through the admin panel
+/uploads/
