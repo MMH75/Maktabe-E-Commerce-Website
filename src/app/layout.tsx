@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Inter, Noto_Nastaliq_Urdu, Playfair_Display } from "next/font/google";
+import { Crimson_Pro, Mulish, Noto_Nastaliq_Urdu } from "next/font/google";
 import "./globals.css";
 import { StoreProvider } from "@/lib/store";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 
-const inter = Inter({
+// Body text — clean geometric sans used on the Anjuman's new website
+const sans = Mulish({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-sans",
   display: "swap",
 });
 
-const playfair = Playfair_Display({
+// Headings — classic book serif
+const serif = Crimson_Pro({
   subsets: ["latin"],
-  variable: "--font-playfair",
+  weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -36,7 +40,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${playfair.variable} ${nastaliq.variable} flex min-h-screen flex-col antialiased`}
+        className={`${sans.variable} ${serif.variable} ${nastaliq.variable} flex min-h-screen flex-col antialiased`}
       >
         <StoreProvider>
           <Header />

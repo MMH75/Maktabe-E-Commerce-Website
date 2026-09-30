@@ -38,7 +38,7 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
 
 export default function Footer() {
   return (
-    <footer className="bg-emerald-deep text-cream">
+    <footer className="border-t-2 border-gold bg-navy text-cream">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-6">
           {/* Brand */}
@@ -91,7 +91,7 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-forest pt-6 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-navy-soft pt-6 sm:flex-row">
           <p className="text-xs text-cream/60">
             © {new Date().getFullYear()} Maktaba Khuddam-ul-Quran, Lahore. All
             rights reserved.
