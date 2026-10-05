@@ -38,7 +38,7 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
 
   failures.delete(ip);
   await createSession();
-  redirect("/admin/products");
+  redirect("/admin");
 }
 
 export async function logout(): Promise<void> {

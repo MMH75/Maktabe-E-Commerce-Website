@@ -17,7 +17,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
   if (session && onLoginPage) {
-    return NextResponse.redirect(new URL("/admin/products", request.url));
+    return NextResponse.redirect(new URL("/admin", request.url));
   }
   return NextResponse.next();
 }

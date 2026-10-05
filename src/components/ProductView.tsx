@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import type { Product } from "@/db/schema";
+import { discountPercent, effectivePrice, formatWeight, isOnSale, LOW_STOCK } from "@/lib/pricing";
 import { useStore } from "@/lib/store";
 
 const URDU_SCRIPT = /[؀-ۿ]/;
@@ -26,13 +27,25 @@ export default function ProductView({ product }: { product: Product }) {
     setOrigin(`${x}% ${y}%`);
   };
 
+  const onSale = isOnSale(product);
+  const inStock = product.stock > 0;
+  const maxQty = Math.max(1, product.stock);
+
   const info = {
     id: product.id,
     titleUr: product.titleUr,
     titleEn: product.titleEn,
-    price: product.price,
+    price: effectivePrice(product),
     image: product.image,
   };
+
+  // Only rows the admin has filled in are shown
+  const specs = [
+    { label: "Author", value: product.author, urdu: URDU_SCRIPT.test(product.author) },
+    { label: "Pages", value: product.pages ? product.pages.toLocaleString() : null },
+    { label: "Paper quality", value: product.paperQuality },
+    { label: "Weight", value: product.weight ? formatWeight(product.weight) : null },
+  ].filter((row) => row.value);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
@@ -102,8 +115,31 @@ export default function ProductView({ product }: { product: Product }) {
 
           <div className="my-5 h-px w-full bg-gold/40" />
 
-          <p className="font-heading text-3xl font-bold text-navy">
-            Rs {product.price.toLocaleString()}
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <p className="font-heading text-3xl font-bold text-navy">
+              Rs {effectivePrice(product).toLocaleString()}
+            </p>
+            {onSale && (
+              <>
+                <p className="font-heading text-xl text-muted line-through">
+                  Rs {product.price.toLocaleString()}
+                </p>
+                <span className="rounded-full bg-crimson px-2.5 py-0.5 text-xs font-bold text-white">
+                  {discountPercent(product)}% OFF
+                </span>
+              </>
+            )}
+          </div>
+          <p
+            className={`mt-2 text-sm font-semibold ${
+              !inStock ? "text-crimson" : product.stock <= LOW_STOCK ? "text-gold" : "text-emerald-700"
+            }`}
+          >
+            {!inStock
+              ? "Out of stock"
+              : product.stock <= LOW_STOCK
+                ? `Only ${product.stock} left in stock`
+                : "In stock"}
           </p>
           <p className="mt-1 text-xs text-muted">
             Free home delivery in Pakistan · Cash on delivery available
@@ -114,6 +150,7 @@ export default function ProductView({ product }: { product: Product }) {
             <div className="flex items-center rounded-md border border-ink/20 bg-surface">
               <button
                 aria-label="Decrease quantity"
+                disabled={!inStock}
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
                 className="px-4 py-3 text-lg text-navy transition hover:bg-cream"
               >
@@ -122,15 +159,18 @@ export default function ProductView({ product }: { product: Product }) {
               <input
                 type="number"
                 min={1}
+                max={maxQty}
                 value={qty}
+                disabled={!inStock}
                 onChange={(e) =>
-                  setQty(Math.max(1, Number(e.target.value) || 1))
+                  setQty(Math.min(maxQty, Math.max(1, Number(e.target.value) || 1)))
                 }
                 className="w-14 border-x border-ink/10 py-3 text-center text-sm font-semibold outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <button
                 aria-label="Increase quantity"
-                onClick={() => setQty((q) => q + 1)}
+                disabled={!inStock}
+                onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
                 className="px-4 py-3 text-lg text-navy transition hover:bg-cream"
               >
                 +
@@ -139,9 +179,10 @@ export default function ProductView({ product }: { product: Product }) {
 
             <button
               onClick={() => addToCart(info, qty)}
-              className="flex-1 rounded-md bg-navy px-6 py-3.5 text-sm font-semibold uppercase tracking-wide text-cream transition hover:bg-navy-soft sm:flex-none sm:px-10"
+              disabled={!inStock}
+              className="flex-1 rounded-md bg-navy px-6 py-3.5 text-sm font-semibold uppercase tracking-wide text-cream transition hover:bg-navy-soft disabled:cursor-not-allowed disabled:bg-muted/50 sm:flex-none sm:px-10"
             >
-              Add to Cart
+              {inStock ? "Add to Cart" : "Out of Stock"}
             </button>
           </div>
 
@@ -169,8 +210,30 @@ export default function ProductView({ product }: { product: Product }) {
             {wished ? "Saved to Wishlist" : "Add to Wishlist"}
           </button>
 
+          {/* Specifications */}
+          {specs.length > 0 && (
+            <div className="mt-8 overflow-hidden rounded-xl border border-cream-deep bg-surface">
+              <h2 className="border-b border-cream-deep bg-cream px-5 py-3 font-heading text-lg font-semibold text-navy">
+                Book details
+              </h2>
+              <dl className="divide-y divide-cream-deep text-sm">
+                {specs.map((row) => (
+                  <div key={row.label} className="grid grid-cols-[9rem_1fr] gap-4 px-5 py-2.5">
+                    <dt className="text-muted">{row.label}</dt>
+                    <dd
+                      className={`font-semibold text-ink ${row.urdu ? "font-urdu font-normal leading-8" : ""}`}
+                      dir={row.urdu ? "rtl" : undefined}
+                    >
+                      {row.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
+
           {/* Description */}
-          <div className="mt-8 rounded-xl bg-surface p-6 shadow-sm">
+          <div className="mt-6 rounded-xl bg-surface p-6 shadow-sm">
             <h2 className="font-heading text-lg font-semibold text-navy">
               About this book
             </h2>

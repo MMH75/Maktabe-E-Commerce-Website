@@ -2,6 +2,7 @@ import Image from "next/image";
 import HeroCarousel from "@/components/HeroCarousel";
 import ProductCard from "@/components/ProductCard";
 import { getActivePosters } from "@/lib/posters";
+import { toProductInfo } from "@/lib/pricing";
 import { getProducts } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
@@ -42,13 +43,7 @@ export default async function HomePage() {
           {products.map((p) => (
             <ProductCard
               key={p.id}
-              product={{
-                id: p.id,
-                titleUr: p.titleUr,
-                titleEn: p.titleEn,
-                price: p.price,
-                image: p.image,
-              }}
+              product={toProductInfo(p)}
             />
           ))}
         </div>

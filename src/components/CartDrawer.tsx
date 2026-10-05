@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useStore } from "@/lib/store";
 
 export default function CartDrawer() {
@@ -113,9 +114,13 @@ export default function CartDrawer() {
                 Rs {cartTotal.toLocaleString()}
               </span>
             </div>
-            <button className="w-full rounded-md bg-navy py-3 text-sm font-semibold tracking-wide text-cream transition hover:bg-navy-soft">
+            <Link
+              href="/checkout"
+              onClick={() => setCartOpen(false)}
+              className="block w-full rounded-md bg-navy py-3 text-center text-sm font-semibold tracking-wide text-cream transition hover:bg-navy-soft"
+            >
               Proceed to Checkout
-            </button>
+            </Link>
             <p className="mt-2 text-center text-[11px] text-muted">
               Free home delivery in Pakistan · Cash on delivery
             </p>

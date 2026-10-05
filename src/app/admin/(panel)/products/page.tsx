@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ActionButton from "@/components/admin/ActionButton";
 import AdminHeading from "@/components/admin/AdminHeading";
+import { effectivePrice, isOnSale, LOW_STOCK } from "@/lib/pricing";
 import { getProducts } from "@/lib/products";
 import { deleteProduct } from "./actions";
 
@@ -24,12 +25,13 @@ export default async function AdminProductsPage() {
         </div>
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-cream-deep bg-surface shadow-sm">
-          <table className="w-full min-w-[640px] text-left text-sm">
+          <table className="w-full min-w-[720px] text-left text-sm">
             <thead className="border-b border-cream-deep bg-cream text-xs uppercase tracking-wider text-muted">
               <tr>
                 <th className="px-4 py-3 font-semibold">Book</th>
                 <th className="px-4 py-3 font-semibold">Author</th>
                 <th className="px-4 py-3 text-right font-semibold">Price</th>
+                <th className="px-4 py-3 text-right font-semibold">Stock</th>
                 <th className="px-4 py-3 text-right font-semibold">Actions</th>
               </tr>
             </thead>
@@ -51,8 +53,22 @@ export default async function AdminProductsPage() {
                     </div>
                   </td>
                   <td dir="auto" className="px-4 py-3 text-ink/80">{p.author}</td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right font-semibold text-navy">
-                    Rs {p.price.toLocaleString()}
+                  <td className="whitespace-nowrap px-4 py-3 text-right">
+                    {isOnSale(p) ? (
+                      <>
+                        <p className="font-semibold text-crimson">Rs {effectivePrice(p).toLocaleString()}</p>
+                        <p className="text-xs text-muted line-through">Rs {p.price.toLocaleString()}</p>
+                      </>
+                    ) : (
+                      <p className="font-semibold text-navy">Rs {p.price.toLocaleString()}</p>
+                    )}
+                  </td>
+                  <td
+                    className={`whitespace-nowrap px-4 py-3 text-right font-semibold ${
+                      p.stock === 0 ? "text-crimson" : p.stock <= LOW_STOCK ? "text-gold" : "text-navy"
+                    }`}
+                  >
+                    {p.stock === 0 ? "Out of stock" : p.stock}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2 whitespace-nowrap">

@@ -59,13 +59,24 @@ export default function ProductCard({ product }: { product: ProductInfo }) {
         </Link>
 
         <div className="mt-auto flex items-center justify-between gap-2 pt-3">
-          <p className="whitespace-nowrap font-heading text-base font-bold text-navy sm:text-lg">
-            Rs {product.price.toLocaleString()}
-          </p>
+          <div className="min-w-0 leading-tight">
+            <p className="whitespace-nowrap font-heading text-base font-bold text-navy sm:text-lg">
+              Rs {product.price.toLocaleString()}
+            </p>
+            {product.originalPrice && (
+              <p className="whitespace-nowrap text-xs text-muted line-through">
+                Rs {product.originalPrice.toLocaleString()}
+              </p>
+            )}
+            {product.inStock === false && (
+              <p className="text-xs font-semibold text-crimson">Out of stock</p>
+            )}
+          </div>
           <button
             onClick={() => addToCart(product, 1)}
+            disabled={product.inStock === false}
             aria-label={`Add ${product.titleEn} to cart`}
-            className="flex items-center gap-1.5 shrink-0 rounded-full bg-navy p-2 text-xs sm:px-3 sm:py-1.5 font-semibold text-white transition hover:bg-gold"
+            className="flex items-center gap-1.5 shrink-0 rounded-full bg-navy p-2 text-xs sm:px-3 sm:py-1.5 font-semibold text-white transition hover:bg-gold disabled:cursor-not-allowed disabled:bg-muted/40"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
               <path strokeLinecap="round" d="M12 5v14M5 12h14" />

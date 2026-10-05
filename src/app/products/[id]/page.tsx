@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import ProductComments from "@/components/ProductComments";
 import ProductView from "@/components/ProductView";
 import { getProduct } from "@/lib/products";
 
@@ -16,5 +17,10 @@ export default async function ProductPage({
   const product = await getProduct(numericId);
   if (!product) notFound();
 
-  return <ProductView product={product} />;
+  return (
+    <>
+      <ProductView product={product} />
+      <ProductComments productId={product.id} />
+    </>
+  );
 }
