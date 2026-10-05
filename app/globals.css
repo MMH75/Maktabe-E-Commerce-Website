@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+:root {
+  /* ===== Design tokens — Markazi Anjuman Khuddam-ul-Quran palette ===== */
+  --mk-navy: #121c3b; /* Midnight Navy — header, footer, primary buttons */
+  --mk-navy-soft: #22305c; /* Lighter navy — hover states */
+  --mk-gold: #c98a24; /* Amber Gold — active pills, accents */
+  --mk-crimson: #9b1b30; /* Crimson — section headings */
+  --mk-cream: #fcf6ee; /* Warm Cream — alternate section / card backgrounds */
+  --mk-cream-deep: #efe3d1; /* Cream border */
+  --mk-surface: #ffffff; /* White */
+  --mk-ink: #1d2850; /* Navy ink — body text */
+  --mk-muted: #5d6789; /* Muted slate — secondary text */
+
+  --color-accent: var(--mk-gold);
+}
+
+@theme inline {
+  --color-navy: var(--mk-navy);
+  --color-navy-soft: var(--mk-navy-soft);
+  --color-gold: var(--mk-gold);
+  --color-crimson: var(--mk-crimson);
+  --color-cream: var(--mk-cream);
+  --color-cream-deep: var(--mk-cream-deep);
+  --color-surface: var(--mk-surface);
+  --color-ink: var(--mk-ink);
+  --color-muted: var(--mk-muted);
+
+  --font-heading: var(--font-serif), Georgia, serif;
+  --font-body: var(--font-sans), system-ui, sans-serif;
+  --font-urdu: var(--font-nastaliq), "Noto Nastaliq Urdu", serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--mk-surface);
+  color: var(--mk-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.font-heading {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+.font-urdu {
+  font-family: var(--font-nastaliq), "Noto Nastaliq Urdu", serif;
+  direction: rtl;
+}
+
+/* Small letter-spaced label above headings ("THE FOUNDER", "ESTABLISHED 1972") */
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+:focus-visible {
+  outline: 2px solid var(--mk-gold);
+  outline-offset: 2px;
+}
