@@ -1,15 +1,16 @@
 import { db } from "@/db";
 import { customers, orders, type Customer } from "@/db/schema";
 import { desc, eq, ilike, or, sql } from "drizzle-orm";
+import { likePattern } from "@/lib/products";
 
 /** Customers, newest first, with how many orders they placed and what they spent. */
 export async function getCustomers(search?: string) {
   const q = search?.trim();
   const where = q
     ? or(
-        ilike(customers.name, `%${q}%`),
-        ilike(customers.email, `%${q}%`),
-        ilike(customers.phone, `%${q}%`),
+        ilike(customers.name, likePattern(q)),
+        ilike(customers.email, likePattern(q)),
+        ilike(customers.phone, likePattern(q)),
       )
     : undefined;
 

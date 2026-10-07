@@ -85,9 +85,22 @@ export async function requireCustomer(returnTo = "/account"): Promise<Customer> 
   return customer;
 }
 
-/** Only allow redirects to pages on this site. */
+/**
+ * Only allow redirects to pages on this site. Browsers treat "\" like "/", so
+ * "/\evil.com" would leave the site; the address is resolved the way a browser
+ * would, and anything that ends up on another host is refused.
+ */
 export function safeNext(next: unknown, fallback = "/account"): string {
-  return typeof next === "string" && next.startsWith("/") && !next.startsWith("//") ? next : fallback;
+  if (typeof next !== "string" || next.length > 500 || !next.startsWith("/")) return fallback;
+  if (/[\\\s\x00-\x1f]/.test(next)) return fallback; // backslashes, spaces, control characters
+  try {
+    const base = "http://same-site.invalid";
+    const url = new URL(next, base);
+    if (url.origin !== base) return fallback;
+    return url.pathname + url.search + url.hash;
+  } catch {
+    return fallback;
+  }
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

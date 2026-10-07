@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -60,6 +61,27 @@ function readJson<T>(key: string, fallback: T): T {
   }
 }
 
+/** Same cap the server uses at checkout (src/lib/checkout.ts). */
+const MAX_QTY = 50;
+
+/**
+ * The saved cart can be old or edited by hand: keep only real-looking lines,
+ * with whole quantities from 1 to MAX_QTY, one line per book.
+ */
+function cleanStoredCart(raw: unknown): CartItem[] {
+  if (!Array.isArray(raw)) return [];
+  const byId = new Map<number, CartItem>();
+  for (const item of raw as Partial<CartItem>[]) {
+    const id = Number(item?.id);
+    const qty = Math.floor(Number(item?.qty));
+    if (!Number.isInteger(id) || id <= 0 || !Number.isFinite(qty) || qty < 1) continue;
+    if (typeof item.titleEn !== "string" || typeof item.image !== "string" || typeof item.price !== "number") continue;
+    const prev = byId.get(id);
+    byId.set(id, { ...(item as CartItem), id, qty: Math.min(MAX_QTY, (prev?.qty ?? 0) + qty) });
+  }
+  return [...byId.values()];
+}
+
 function write(key: string, value: string) {
   try {
     localStorage.setItem(key, value);
@@ -81,12 +103,14 @@ export function StoreProvider({
   const [cartOpen, setCartOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const customerId = customer?.id ?? null;
+  // Books the visitor un-hearted while the wishlist was being synced with the server
+  const removedDuringSync = useRef<Set<number>>(new Set());
 
   // localStorage only exists in the browser, so saved data is loaded after the
   // first render; reading it during render would not match the server's HTML.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- see comment above
-    setCart(readJson<CartItem[]>(CART_KEY, []));
+    setCart(cleanStoredCart(readJson<unknown>(CART_KEY, [])));
     setHydrated(true);
   }, []);
 
@@ -107,9 +131,25 @@ export function StoreProvider({
     // eslint-disable-next-line react-hooks/set-state-in-effect -- loaded from localStorage, as above
     setWishlist(local);
 
-    syncWishlist(local.map((p) => p.id))
+    const sent = new Set(local.map((p) => p.id));
+    removedDuringSync.current = new Set();
+    syncWishlist([...sent])
       .then(({ items }) => {
-        if (!cancelled) setWishlist(items);
+        if (cancelled) return;
+        // Merge rather than replace: hearts clicked while this request was
+        // running must not be lost.
+        setWishlist((prev) => {
+          const fresh = new Map(items.map((i) => [i.id, i]));
+          const prevIds = new Set(prev.map((p) => p.id));
+          // Keep what is on screen now; refresh it from the server. Drop books we
+          // asked about that the server no longer knows (deleted books).
+          const kept = prev
+            .filter((p) => fresh.has(p.id) || !sent.has(p.id))
+            .map((p) => fresh.get(p.id) ?? p);
+          // Books saved on the account from another device — unless just removed here
+          const added = items.filter((i) => !prevIds.has(i.id) && !removedDuringSync.current.has(i.id));
+          return [...kept, ...added];
+        });
       })
       .catch(() => {
         // offline or server error: keep what the browser had
@@ -135,10 +175,10 @@ export function StoreProvider({
       const existing = prev.find((i) => i.id === product.id);
       if (existing) {
         return prev.map((i) =>
-          i.id === product.id ? { ...i, qty: i.qty + qty } : i
+          i.id === product.id ? { ...i, qty: Math.min(MAX_QTY, i.qty + qty) } : i
         );
       }
-      return [...prev, { ...product, qty }];
+      return [...prev, { ...product, qty: Math.min(MAX_QTY, qty) }];
     });
     setCartOpen(true);
   }, []);
@@ -151,7 +191,7 @@ export function StoreProvider({
     setCart((prev) =>
       qty <= 0
         ? prev.filter((i) => i.id !== id)
-        : prev.map((i) => (i.id === id ? { ...i, qty } : i))
+        : prev.map((i) => (i.id === id ? { ...i, qty: Math.min(MAX_QTY, qty) } : i))
     );
   }, []);
 
@@ -165,6 +205,8 @@ export function StoreProvider({
   const toggleWishlist = useCallback(
     (product: ProductInfo) => {
       const wished = !wishlist.some((i) => i.id === product.id);
+      if (wished) removedDuringSync.current.delete(product.id);
+      else removedDuringSync.current.add(product.id);
       setWishlist((prev) =>
         wished ? [...prev.filter((i) => i.id !== product.id), product] : prev.filter((i) => i.id !== product.id)
       );

@@ -23,7 +23,7 @@ export async function setSalePrice(id: number, salePrice: number | null): Promis
   if (!book) return "This book no longer exists.";
   if (salePrice !== null) {
     if (!Number.isInteger(salePrice) || salePrice < 0) return "Sale price must be a whole number of rupees.";
-    if (salePrice >= book.price) return `Must be lower than the price (Rs ${book.price.toLocaleString()}).`;
+    if (salePrice >= book.price) return `Must be lower than the price (Rs ${book.price.toLocaleString("en-US")}).`;
   }
   await db.update(products).set({ salePrice }).where(eq(products.id, id));
   refresh();

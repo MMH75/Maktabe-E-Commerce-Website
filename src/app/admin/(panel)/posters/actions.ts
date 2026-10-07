@@ -20,9 +20,23 @@ function readFields(formData: FormData) {
 
 function validate(f: ReturnType<typeof readFields>): string | null {
   if (!f.altText) return "Description (alt text) is required.";
-  if (f.linkUrl && !/^(\/|https?:\/\/)/.test(f.linkUrl))
+  if (f.linkUrl && !isSafeLink(f.linkUrl))
     return "Link must start with / (a page on this site) or https://";
   return null;
+}
+
+/**
+ * A page on this site ("/all-books") or a secure outside link ("https://…").
+ * "//host" and "/\host" look local but browsers send them to another site.
+ */
+function isSafeLink(link: string): boolean {
+  if (link.length > 500 || /[\s\\\x00-\x1f]/.test(link)) return false;
+  if (link.startsWith("/")) return !link.startsWith("//");
+  try {
+    return new URL(link).protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 function refresh() {

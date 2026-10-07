@@ -36,6 +36,8 @@ export const metadata: Metadata = {
   title: "Maktaba Khuddam-ul-Quran — مکتبہ خدام القرآن",
   description:
     "Premium online Islamic bookstore — books by Dr. Israr Ahmed (RA), Quranic commentary, and Islamic literature with free home delivery in Pakistan.",
+  // Browser-tab icon (the site has no favicon.ico)
+  icons: { icon: "/logo3.png" },
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
@@ -47,8 +49,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const menu = (list: typeof categories) => list.map((c) => ({ name: c.name, slug: c.slug }));
 
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${sans.variable} ${serif.variable} ${nastaliq.variable} flex min-h-screen flex-col antialiased`}
       >
         <StoreProvider customer={customer && { id: customer.id, name: customer.name }}>

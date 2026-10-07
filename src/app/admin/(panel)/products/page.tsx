@@ -56,11 +56,11 @@ export default async function AdminProductsPage() {
                   <td className="whitespace-nowrap px-4 py-3 text-right">
                     {isOnSale(p) ? (
                       <>
-                        <p className="font-semibold text-crimson">Rs {effectivePrice(p).toLocaleString()}</p>
-                        <p className="text-xs text-muted line-through">Rs {p.price.toLocaleString()}</p>
+                        <p className="font-semibold text-crimson">Rs {effectivePrice(p).toLocaleString("en-US")}</p>
+                        <p className="text-xs text-muted line-through">Rs {p.price.toLocaleString("en-US")}</p>
                       </>
                     ) : (
-                      <p className="font-semibold text-navy">Rs {p.price.toLocaleString()}</p>
+                      <p className="font-semibold text-navy">Rs {p.price.toLocaleString("en-US")}</p>
                     )}
                   </td>
                   <td

@@ -33,12 +33,12 @@ export default async function AddressesPage() {
           {addresses.map((a) => (
             <li
               key={a.id}
-              className={`flex flex-col rounded-xl border p-4 ${a.isDefault ? "border-gold bg-gold/5" : "border-cream-deep"}`}
+              className={`flex min-w-0 flex-col break-words rounded-xl border p-4 [overflow-wrap:anywhere] ${a.isDefault ? "border-gold bg-gold/5" : "border-cream-deep"}`}
             >
-              <div className="mb-2 flex items-center gap-2">
-                <span className="font-semibold text-navy">{a.label || "Address"}</span>
+              <div className="mb-2 flex flex-wrap items-center gap-2">
+                <span className="min-w-0 font-semibold text-navy">{a.label || "Address"}</span>
                 {a.isDefault && (
-                  <span className="rounded-full bg-gold px-2 py-0.5 text-[11px] font-bold text-white">Default</span>
+                  <span className="shrink-0 rounded-full bg-gold px-2 py-0.5 text-[11px] font-bold text-white">Default</span>
                 )}
               </div>
               <p className="text-sm text-ink">{a.fullName}</p>

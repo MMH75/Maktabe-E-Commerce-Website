@@ -85,11 +85,11 @@ export default async function MyOrderPage({ params }: { params: Promise<{ id: st
                   item.titleEn
                 )}{" "}
                 <span className="text-muted">
-                  × {item.quantity} @ Rs {item.unitPrice.toLocaleString()}
+                  × {item.quantity} @ Rs {item.unitPrice.toLocaleString("en-US")}
                 </span>
               </span>
               <span className="whitespace-nowrap font-semibold text-navy">
-                Rs {(item.unitPrice * item.quantity).toLocaleString()}
+                Rs {(item.unitPrice * item.quantity).toLocaleString("en-US")}
               </span>
             </li>
           ))}
@@ -97,11 +97,11 @@ export default async function MyOrderPage({ params }: { params: Promise<{ id: st
         <dl className="mt-2 space-y-1 border-t border-cream-deep pt-3 text-sm">
           <div className="flex justify-between">
             <dt className="text-muted">Delivery</dt>
-            <dd>{order.deliveryCharge === 0 ? "Free" : `Rs ${order.deliveryCharge.toLocaleString()}`}</dd>
+            <dd>{order.deliveryCharge === 0 ? "Free" : `Rs ${order.deliveryCharge.toLocaleString("en-US")}`}</dd>
           </div>
           <div className="flex justify-between text-base">
             <dt className="font-semibold text-navy">Total</dt>
-            <dd className="font-heading text-xl font-bold text-navy">Rs {order.total.toLocaleString()}</dd>
+            <dd className="font-heading text-xl font-bold text-navy">Rs {order.total.toLocaleString("en-US")}</dd>
           </div>
         </dl>
         <div className="mt-4 rounded-lg bg-cream p-3 text-sm">

@@ -7,7 +7,7 @@ import type { SortValue } from "@/lib/sorts";
 const payPrice = sql`case when ${products.salePrice} is not null and ${products.salePrice} < ${products.price} then ${products.salePrice} else ${products.price} end`;
 
 /** Escapes % and _ so a search for "100%" matches literally. */
-function likePattern(text: string) {
+export function likePattern(text: string) {
   return `%${text.replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
 }
 

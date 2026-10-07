@@ -1,11 +1,14 @@
 import type { ReactNode } from "react";
 import AccountNav from "@/components/account/AccountNav";
-import { requireCustomer } from "@/lib/customer-auth";
+import { getCurrentCustomer } from "@/lib/customer-auth";
 import { logoutCustomer } from "../actions";
 
-// Every page in this group needs a logged-in customer (each page checks too).
+// Every page in this group needs a logged-in customer. Each page calls
+// requireCustomer("<its own path>") itself, so after logging in the customer
+// returns to the page they asked for; the layout only renders the frame.
 export default async function AccountLayout({ children }: { children: ReactNode }) {
-  const customer = await requireCustomer();
+  const customer = await getCurrentCustomer();
+  if (!customer) return <>{children}</>; // the page redirects to the login page
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">

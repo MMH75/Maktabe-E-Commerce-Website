@@ -33,7 +33,7 @@ export default async function AdminInventoryPage({
     <>
       <AdminHeading
         title="Inventory"
-        subtitle={`${totalCopies.toLocaleString()} copies across ${all.length} books · ${lowCount} low · ${outCount} out of stock`}
+        subtitle={`${totalCopies.toLocaleString("en-US")} copies across ${all.length} books · ${lowCount} low · ${outCount} out of stock`}
       />
 
       <nav aria-label="Filter books" className="mb-5 flex flex-wrap gap-2">

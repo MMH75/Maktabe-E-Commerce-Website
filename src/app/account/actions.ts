@@ -1,6 +1,7 @@
 "use server";
 
 import { and, eq, ne } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
@@ -137,6 +138,7 @@ export async function updateProfile(_prev: FormState, formData: FormData): Promi
     if (isUniqueViolation(err)) return { error: "Another account already uses this email.", values };
     throw err;
   }
+  revalidatePath("/", "layout"); // the greeting and the header show the customer's name
   return { success: "Your details have been saved.", values };
 }
 

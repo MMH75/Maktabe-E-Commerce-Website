@@ -7,3 +7,6 @@ vendor/
 
 # Images uploaded through the admin panel
 /uploads/
+
+# Playwright MCP test output (screenshots, page snapshots, console logs)
+.playwright-mcp/

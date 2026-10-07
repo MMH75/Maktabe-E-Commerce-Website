@@ -34,7 +34,7 @@ export default async function MyOrdersPage() {
                   <span className="block text-xs text-muted">{formatDateTime(o.createdAt)}</span>
                 </span>
                 <span className="flex items-center gap-3">
-                  <span className="text-sm font-semibold text-navy">Rs {o.total.toLocaleString()}</span>
+                  <span className="text-sm font-semibold text-navy">Rs {o.total.toLocaleString("en-US")}</span>
                   <StatusBadge status={o.status} />
                 </span>
               </Link>

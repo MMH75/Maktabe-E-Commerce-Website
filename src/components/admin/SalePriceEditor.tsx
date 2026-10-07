@@ -48,7 +48,7 @@ export default function SalePriceEditor({
       onSubmit={(e) => {
         e.preventDefault();
         if (!valid) {
-          setMessage({ text: `Use a whole number below Rs ${price.toLocaleString()}.`, error: true });
+          setMessage({ text: `Use a whole number below Rs ${price.toLocaleString("en-US")}.`, error: true });
           return;
         }
         run(next);

@@ -87,7 +87,7 @@ export default function CartDrawer() {
                         </button>
                       </div>
                       <span className="text-sm font-semibold text-navy">
-                        Rs {(item.price * item.qty).toLocaleString()}
+                        Rs {(item.price * item.qty).toLocaleString("en-US")}
                       </span>
                     </div>
                   </div>
@@ -111,7 +111,7 @@ export default function CartDrawer() {
             <div className="mb-3 flex items-center justify-between">
               <span className="text-sm text-muted">Subtotal</span>
               <span className="font-heading text-lg font-bold text-navy">
-                Rs {cartTotal.toLocaleString()}
+                Rs {cartTotal.toLocaleString("en-US")}
               </span>
             </div>
             <Link

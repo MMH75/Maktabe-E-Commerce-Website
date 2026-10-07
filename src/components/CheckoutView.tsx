@@ -90,6 +90,9 @@ export default function CheckoutView({
 
   /** Makes the cart match what can actually be ordered. */
   function fixCart(q: Quote) {
+    // Lines the server ignored altogether (unusable entries) are removed too
+    const quoted = new Set(q.lines.map((l) => l.id));
+    for (const item of cart) if (!quoted.has(item.id)) removeFromCart(item.id);
     for (const line of q.lines) {
       if (line.problem === "removed" || line.problem === "out") removeFromCart(line.id);
       else if (line.problem === "short") setQty(line.id, line.stock);
@@ -164,7 +167,7 @@ export default function CheckoutView({
               {addresses.map((a) => (
                 <label
                   key={a.id}
-                  className="flex cursor-pointer items-start gap-3 rounded-xl border border-cream-deep p-3 text-sm has-[:checked]:border-gold has-[:checked]:bg-gold/5"
+                  className="flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border border-cream-deep p-3 text-sm [overflow-wrap:anywhere] has-[:checked]:border-gold has-[:checked]:bg-gold/5"
                 >
                   <input
                     type="radio"
@@ -254,7 +257,7 @@ export default function CheckoutView({
                     <div className="min-w-0 flex-1 text-sm">
                       <p className="font-semibold text-navy">{l.titleEn}</p>
                       <p className="text-muted">
-                        {l.qty} × Rs {l.unitPrice.toLocaleString()}
+                        {l.qty} × Rs {l.unitPrice.toLocaleString("en-US")}
                       </p>
                       {l.problem && (
                         <p className="text-xs font-semibold text-crimson">
@@ -263,7 +266,7 @@ export default function CheckoutView({
                       )}
                     </div>
                     <p className="whitespace-nowrap text-sm font-semibold text-navy">
-                      Rs {(l.unitPrice * l.qty).toLocaleString()}
+                      Rs {(l.unitPrice * l.qty).toLocaleString("en-US")}
                     </p>
                   </li>
                 ))}
@@ -285,15 +288,15 @@ export default function CheckoutView({
               <dl className="space-y-1 border-t border-cream-deep pt-3 text-sm">
                 <div className="flex justify-between">
                   <dt className="text-muted">Subtotal</dt>
-                  <dd className="text-ink">Rs {quote.subtotal.toLocaleString()}</dd>
+                  <dd className="text-ink">Rs {quote.subtotal.toLocaleString("en-US")}</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-muted">Delivery</dt>
-                  <dd className="text-ink">{quote.delivery === 0 ? "Free" : `Rs ${quote.delivery.toLocaleString()}`}</dd>
+                  <dd className="text-ink">{quote.delivery === 0 ? "Free" : `Rs ${quote.delivery.toLocaleString("en-US")}`}</dd>
                 </div>
                 <div className="flex justify-between border-t border-cream-deep pt-2 text-base">
                   <dt className="font-semibold text-navy">Total</dt>
-                  <dd className="font-heading text-xl font-bold text-navy">Rs {quote.total.toLocaleString()}</dd>
+                  <dd className="font-heading text-xl font-bold text-navy">Rs {quote.total.toLocaleString("en-US")}</dd>
                 </div>
               </dl>
             </>

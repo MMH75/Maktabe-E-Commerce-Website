@@ -42,7 +42,7 @@ export default async function AdminDashboard() {
         <StatCard label="Today's orders" value={String(stats.todayOrders)} href="/admin/orders" />
         <StatCard
           label="Today's sales"
-          value={`Rs ${stats.todayRevenue.toLocaleString()}`}
+          value={`Rs ${stats.todayRevenue.toLocaleString("en-US")}`}
           href="/admin/orders"
         />
         <StatCard
@@ -87,7 +87,7 @@ export default async function AdminDashboard() {
                       <span className="block text-xs text-muted">{formatDateTime(o.createdAt)}</span>
                     </span>
                     <span className="flex shrink-0 items-center gap-3">
-                      <span className="text-sm font-semibold text-navy">Rs {o.total.toLocaleString()}</span>
+                      <span className="text-sm font-semibold text-navy">Rs {o.total.toLocaleString("en-US")}</span>
                       <StatusBadge status={o.status} />
                     </span>
                   </Link>

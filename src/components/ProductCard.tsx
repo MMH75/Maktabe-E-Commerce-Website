@@ -61,11 +61,11 @@ export default function ProductCard({ product }: { product: ProductInfo }) {
         <div className="mt-auto flex items-center justify-between gap-2 pt-3">
           <div className="min-w-0 leading-tight">
             <p className="whitespace-nowrap font-heading text-base font-bold text-navy sm:text-lg">
-              Rs {product.price.toLocaleString()}
+              Rs {product.price.toLocaleString("en-US")}
             </p>
             {product.originalPrice && (
               <p className="whitespace-nowrap text-xs text-muted line-through">
-                Rs {product.originalPrice.toLocaleString()}
+                Rs {product.originalPrice.toLocaleString("en-US")}
               </p>
             )}
             {product.inStock === false && (

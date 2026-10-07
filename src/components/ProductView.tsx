@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState } from "react";
 import type { Product } from "@/db/schema";
 import { discountPercent, effectivePrice, formatWeight, isOnSale, LOW_STOCK } from "@/lib/pricing";
@@ -42,7 +43,7 @@ export default function ProductView({ product }: { product: Product }) {
   // Only rows the admin has filled in are shown
   const specs = [
     { label: "Author", value: product.author, urdu: URDU_SCRIPT.test(product.author) },
-    { label: "Pages", value: product.pages ? product.pages.toLocaleString() : null },
+    { label: "Pages", value: product.pages ? product.pages.toLocaleString("en-US") : null },
     { label: "Paper quality", value: product.paperQuality },
     { label: "Weight", value: product.weight ? formatWeight(product.weight) : null },
   ].filter((row) => row.value);
@@ -50,12 +51,12 @@ export default function ProductView({ product }: { product: Product }) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       {/* Breadcrumb */}
-      <nav className="mb-6 text-xs text-muted">
-        <span>Home</span>
+      <nav aria-label="Breadcrumb" className="mb-6 text-xs text-muted">
+        <Link href="/" className="hover:text-navy">Home</Link>
         <span className="mx-2 text-gold">/</span>
-        <span>Books</span>
+        <Link href="/all-books" className="hover:text-navy">Books</Link>
         <span className="mx-2 text-gold">/</span>
-        <span className="text-ink">{product.titleEn}</span>
+        <span className="text-ink" aria-current="page">{product.titleEn}</span>
       </nav>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
@@ -117,12 +118,12 @@ export default function ProductView({ product }: { product: Product }) {
 
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
             <p className="font-heading text-3xl font-bold text-navy">
-              Rs {effectivePrice(product).toLocaleString()}
+              Rs {effectivePrice(product).toLocaleString("en-US")}
             </p>
             {onSale && (
               <>
                 <p className="font-heading text-xl text-muted line-through">
-                  Rs {product.price.toLocaleString()}
+                  Rs {product.price.toLocaleString("en-US")}
                 </p>
                 <span className="rounded-full bg-crimson px-2.5 py-0.5 text-xs font-bold text-white">
                   {discountPercent(product)}% OFF

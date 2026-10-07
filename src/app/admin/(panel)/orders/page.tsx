@@ -26,7 +26,7 @@ export default async function AdminOrdersPage({
         title="Orders"
         subtitle={`${rows.length} order${rows.length === 1 ? "" : "s"}${
           filtered ? " match the filters" : ""
-        } · Rs ${total.toLocaleString()} (excluding cancelled)`}
+        } · Rs ${total.toLocaleString("en-US")} (excluding cancelled)`}
       />
 
       {/* Filters — a plain GET form, so a filtered list has its own shareable address */}
@@ -96,7 +96,7 @@ export default async function AdminOrdersPage({
                   </td>
                   <td className="px-4 py-3 text-right text-ink/80">{copies}</td>
                   <td className="whitespace-nowrap px-4 py-3 text-right font-semibold text-navy">
-                    Rs {o.total.toLocaleString()}
+                    Rs {o.total.toLocaleString("en-US")}
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={o.status} />

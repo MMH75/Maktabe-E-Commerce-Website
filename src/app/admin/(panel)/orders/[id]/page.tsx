@@ -81,11 +81,11 @@ export default async function AdminOrderPage({
                       </p>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-right text-ink/80">
-                      Rs {item.unitPrice.toLocaleString()}
+                      Rs {item.unitPrice.toLocaleString("en-US")}
                     </td>
                     <td className="px-4 py-3 text-right text-ink/80">{item.quantity}</td>
                     <td className="whitespace-nowrap px-4 py-3 text-right font-semibold text-navy">
-                      Rs {(item.unitPrice * item.quantity).toLocaleString()}
+                      Rs {(item.unitPrice * item.quantity).toLocaleString("en-US")}
                     </td>
                   </tr>
                 ))}
@@ -93,18 +93,18 @@ export default async function AdminOrderPage({
               <tfoot className="border-t border-cream-deep text-sm">
                 <tr>
                   <td colSpan={3} className="px-4 pt-3 text-right text-muted">Subtotal</td>
-                  <td className="px-4 pt-3 text-right text-ink">Rs {order.subtotal.toLocaleString()}</td>
+                  <td className="px-4 pt-3 text-right text-ink">Rs {order.subtotal.toLocaleString("en-US")}</td>
                 </tr>
                 <tr>
                   <td colSpan={3} className="px-4 text-right text-muted">Delivery</td>
                   <td className="px-4 text-right text-ink">
-                    {order.deliveryCharge === 0 ? "Free" : `Rs ${order.deliveryCharge.toLocaleString()}`}
+                    {order.deliveryCharge === 0 ? "Free" : `Rs ${order.deliveryCharge.toLocaleString("en-US")}`}
                   </td>
                 </tr>
                 <tr>
                   <td colSpan={3} className="px-4 pb-3 text-right font-semibold text-navy">Total (cash on delivery)</td>
                   <td className="px-4 pb-3 text-right font-heading text-lg font-bold text-navy">
-                    Rs {order.total.toLocaleString()}
+                    Rs {order.total.toLocaleString("en-US")}
                   </td>
                 </tr>
               </tfoot>

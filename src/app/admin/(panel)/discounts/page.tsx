@@ -118,7 +118,7 @@ export default async function AdminDiscountsPage({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-right text-ink/80">
-                    Rs {p.price.toLocaleString()}
+                    Rs {p.price.toLocaleString("en-US")}
                   </td>
                   <td className="px-4 py-3">
                     <SalePriceEditor

@@ -61,7 +61,7 @@ export default async function AdminPostersPage() {
                   p.isActive ? "" : "opacity-50 grayscale"
                 }`}
               >
-                <Image src={p.imageUrl} alt={p.altText} fill sizes="256px" className="object-contain" />
+                <Image src={p.imageUrl} alt={p.altText} fill sizes="256px" priority={i === 0} className="object-contain" />
               </div>
 
               {/* Details */}

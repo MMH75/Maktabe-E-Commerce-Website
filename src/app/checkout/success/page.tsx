@@ -40,7 +40,7 @@ export default async function OrderSuccessPage({
         </p>
         <p className="mt-3 text-sm text-ink">
           We will call you on <span className="font-semibold">{order.phone}</span> to confirm. Please keep{" "}
-          <span className="font-semibold">Rs {order.total.toLocaleString()}</span> ready in cash for the delivery.
+          <span className="font-semibold">Rs {order.total.toLocaleString("en-US")}</span> ready in cash for the delivery.
         </p>
       </div>
 
@@ -52,7 +52,7 @@ export default async function OrderSuccessPage({
                 {item.titleEn} <span className="text-muted">× {item.quantity}</span>
               </span>
               <span className="whitespace-nowrap font-semibold text-navy">
-                Rs {(item.unitPrice * item.quantity).toLocaleString()}
+                Rs {(item.unitPrice * item.quantity).toLocaleString("en-US")}
               </span>
             </li>
           ))}
@@ -60,11 +60,11 @@ export default async function OrderSuccessPage({
         <dl className="mt-2 space-y-1 border-t border-cream-deep pt-3 text-sm">
           <div className="flex justify-between">
             <dt className="text-muted">Delivery</dt>
-            <dd>{order.deliveryCharge === 0 ? "Free" : `Rs ${order.deliveryCharge.toLocaleString()}`}</dd>
+            <dd>{order.deliveryCharge === 0 ? "Free" : `Rs ${order.deliveryCharge.toLocaleString("en-US")}`}</dd>
           </div>
           <div className="flex justify-between text-base">
             <dt className="font-semibold text-navy">Total (cash on delivery)</dt>
-            <dd className="font-heading text-xl font-bold text-navy">Rs {order.total.toLocaleString()}</dd>
+            <dd className="font-heading text-xl font-bold text-navy">Rs {order.total.toLocaleString("en-US")}</dd>
           </div>
         </dl>
         <div className="mt-4 rounded-lg bg-cream p-3 text-sm">

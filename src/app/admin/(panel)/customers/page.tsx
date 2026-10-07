@@ -73,7 +73,7 @@ export default async function AdminCustomersPage({
                   <td className="whitespace-nowrap px-4 py-3 text-ink/80">{formatDate(c.createdAt)}</td>
                   <td className="px-4 py-3 text-right text-ink/80">{orderCount}</td>
                   <td className="whitespace-nowrap px-4 py-3 text-right font-semibold text-navy">
-                    Rs {spent.toLocaleString()}
+                    Rs {spent.toLocaleString("en-US")}
                   </td>
                   <td className="px-4 py-3">
                     {c.isActive ? (
